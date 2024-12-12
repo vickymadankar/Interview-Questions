@@ -182,44 +182,47 @@ Qn-How to do parent to child communication vice versa?
 Public Properties: In LWC, you can pass data from a parent component to a child component using public properties. 
 The child component exposes these properties using the @api decorator, and the parent component sets these properties 
 directly in its template.
-	   
+************************************	   
 (childComponent.js)
------------------------------
+
 import { LightningElement, api } from 'lwc';
 
 export default class ChildComponent extends LightningElement {
     @api message; 
 }
--------------------------------
+
+****************************************
 (childComponent.html)
---------------------------------
+
 <template>
     <p>{message}</p>
 </template>
---------------------------------
+
+************************************
 (parentComponent.js)
---------------------------------
+
 import { LightningElement } from 'lwc';
 
 export default class ParentComponent extends LightningElement {
     parentMessage = 'Hello from Parent!';
 }
-----------------------------
+
+********************************************
 (parentComponent.html)
----------------------------------
+
 <template>
     <c-child-component message={parentMessage}></c-child-component> 
 </template>
------------------------------------
+-----------------------------------------------------
 
-#Child to Parent Communication---------------------------
+###################Child to Parent Communication------------------
 
 Custom Events: To send data from a child component to a parent component, you can use custom events. 
-The child component dispatches an event with the necessary data, and the parent component listens for this event 
-and handles it accordingly.
-
+The child component dispatches an event with the necessary data, and the parent component 
+listens for this event and handles it accordingly.
+*****************************************
 (childComponent.js)
-----------------------------
+
 import { LightningElement } from 'lwc';
 
 export default class ChildComponent extends LightningElement {
@@ -230,15 +233,17 @@ export default class ChildComponent extends LightningElement {
         this.dispatchEvent(event); 
     }
 }
----------------------------------------
+***********************************
+
 (childComponent.html)
-------------------------------------
+
 <template>
     <button onclick={handleClick}>Send Message to Parent</button>
 </template>
------------------------
+****************************
+
 (parentComponent.js)
-------------------------------
+
 import { LightningElement } from 'lwc';
 
 export default class ParentComponent extends LightningElement {
@@ -246,9 +251,10 @@ export default class ParentComponent extends LightningElement {
         console.log(event.detail); 
     }
 }
-------------------------------
+********************************
+
 (parentComponent.html)
------------------------
+
 <template>
     <c-child-component onmessage={handleMessage}></c-child-component> 
 </template>
@@ -286,33 +292,33 @@ We can do parent to child comunication using attribute
 ### Parent-to-Child Communication
 
 **Scenario:** A parent component passes a message to a child component.
-
+********************************************************
 **Parent Component (ParentComponent.cmp):**
 
 <aura:component>
     <c:ChildComponent message="Hello, Child!" />
 </aura:component>
 
-
+*****************************************************
 (ChildComponent.cmp):**
 
 <aura:component>
     <aura:attribute name="message" type="String" />
     <p>{!v.message}</p>
 </aura:component>
-
+----------------------------------------------------------
 
 ### Child-to-Parent Communication
 
 **Scenario:** A child component notifies the parent component when a button is clicked.
-
+****************************************************
 (ChildComponent.cmp):**
 
 <aura:component>
     <aura:attribute name="onButtonClick" type="Aura.Action" />
     <lightning:button label="Click Here" onclick="{!c.handleClick}" />
 </aura:component>
-
+**********************************************************
 
 (ChildComponentController.js):**
 
@@ -324,7 +330,7 @@ We can do parent to child comunication using attribute
         }
     }
 })
-
+**************************************************************
 
 (ParentComponent.cmp):**
 
@@ -332,7 +338,7 @@ We can do parent to child comunication using attribute
     <c:ChildComponent onButtonClick="{!c.handleChildClick}" />
 </aura:component>
 
-
+**************************************************************
 **Parent Component Controller (ParentComponentController.js):**
 
 ({
@@ -344,7 +350,7 @@ We can do parent to child comunication using attribute
 ----------------------------------------------------------------------------------------------
 Qn.2. How can you call one JS controller method from another JS controller method in aura?
 here is sample code to call another JS method.
-
+**********************************************************
 ({
     func1 : function(component, event, helper) {
      
@@ -389,7 +395,7 @@ myEvent.fire();
 
 To subscribe to an application event, we use the <aura:handler>tag in our component markup. 
 Here’s an example:
-
+*******************************************************************
 <!-- MyComponent.cmp -->
 <aura:component>
     <aura:handler event="c:myEvent" action="{!c.handleEvent}"/>
@@ -438,7 +444,7 @@ Qn.Example of integrating Salesforce with external systems using both REST and S
 ### REST Integration Example
 
 **Scenario:** Fetching data from an external REST API.
-
+****************************************************
 **Apex Class:**
 
 public class RestIntegrationExample {
