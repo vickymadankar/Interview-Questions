@@ -11,22 +11,20 @@ export default class LwcComponent extends LightningElement {
     }
 }
 *********************************************
-**LWC Template (`lwcComponent.html`):**
-
+**LWC Template (`lwcComponent.html`):
 <template>
     <div>{message}</div>
 </template>
 ************************************************
 
-**Aura Component (`MyAura.cmp`):**
-
+**Aura Component (`MyAura.cmp`):
 <aura:component>
     <c:lwcComponent aura:id="lwcComponent"></c:lwcComponent>
     <lightning:button label="Call LWC Method" onclick="{! c.handleClick }"/>
 </aura:component>
 *************************************************
 
-**Aura Controller (`auraController.js`):**
+**Aura Controller (`auraController.js`):
 ***********************************************
 ({
     handleClick: function(component, event, helper) {
@@ -46,7 +44,7 @@ export default class LwcComponent extends LightningElement {
 </aura:component>
 *****************************************************
 
-**Aura Controller (`auraController.js`):**
+**Aura Controller (`auraController.js`):
 ***********************************************
 ({
     showMessage: function(component, event, helper) {
@@ -55,7 +53,7 @@ export default class LwcComponent extends LightningElement {
 })
 ******************************************
 
-**LWC Component (`lwcComponent.js`):**
+**LWC Component (`lwcComponent.js`):
 *****************************************
 import { LightningElement, api } from 'lwc';
 export default class lwcComponent extends LightningElement {
