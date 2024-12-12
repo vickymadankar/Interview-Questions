@@ -1,0 +1,602 @@
+Thankyou very much for giving me this opportunity.
+My name is Vicky Madankar. I am working as a Salesforce dev for more than 5 years. I am with Perficient for more than 2 years.
+I have already the skills and qualities who will match the job description.
+Over these last years I worked in various roles,where i need to collaborate with various other people.
+Previously I was working with Phillips 66 in their Project. where I worked on making the User Experience better,
+by implementing Lightning web components, Lightning Flows and other development procedures. This made the Users happy.
+
+----------------------------------
+Good Morning Everyone. Thank you very much for giving me this opportunity. My name is Vicky Madankar, and I have been working as a Salesforce Developer 
+for over five years. For the past two years, I have been with Perficient.Throughout my career, I have taken on various roles that required extensive 
+collaboration with different teams and stakeholders. Recently I was working on a project for Phillips 66.
+In this role, I focused on enhancing the user experience by implementing Lightning Web Components, Lightning Flows, and other development procedures.
+Before that I was working on CAT Non Finance Project. 
+
+
+--------------------LWC-----------------------------
+Qn. Use case scenarion in Project about LWC.
+Ans. Phillips 66 User has a component on a Quote Record Page where Under a particular Quote user was adding a ship to record
+are displayed.Pagination was there to navigate user to the records.User was doing manual search using ctrl+f and was
+searching for records which he wants to add under the quote record. 
+
+For better user Experience I added Search functionality in the LWC Component. I modified the component so that 
+the selection persists even after he resets the search or he NAvigates to next.
+I created a new Set to store the selected rows and pass those selected rows to the furher functions.
+
+Qn.1.What is wire adapter? how it is used?
+.when should i use Imperative call, when should i use wire adapter call? give use case for both.
+Ans-Wire Service:
+Declarative Approach: Use the @wire decorator to automatically fetch and bind data to your component.
+Reactive Updates: Ideal for scenarios where you need the UI to automatically update when the data changes.
+Caching: Efficient for read-only data as it supports caching, reducing server calls.
+Example Use Case: Displaying a list of records that updates in real-time as data changes.
+
+Imperative Calls:
+
+Imperative Approach: Use JavaScript to call Apex methods directly, giving you more control over when and how data is fetched.
+Single Response: Suitable for operations that require user interaction, like form submissions or button clicks.
+Flexibility: Allows handling of complex logic and error handling within the component.
+Example Use Case: Submitting a form where you need to handle the response and show a success or error message.
+-------------------------------------------
+Qn.What happen if I use cacheable=false ?
+Ans-If you use the @wire method with an Apex method that has cacheable=false, the data fetched will not be cached on the client side. This means:
+
+No Caching: Every time the wire service is triggered, it will make a fresh call to the server to fetch the data, which can lead to increased server load and 
+slower performance.
+No Reactive Updates: The wire service won’t benefit from the Lightning Data Service (LDS) cache, so it won’t 
+automatically update the UI with cached data when the data changes.
+Use Cases: This setup is generally used when you need the most up-to-date data and caching is not suitable, 
+such as for real-time data that changes frequently.
+For better performance and reactive updates, it’s recommended to use cacheable=true whenever possible.
+-------------------------------------------
+Qn. What is SLDS?
+The Salesforce Lightning Design System (SLDS) is the user interface design framework 
+used by Salesforce for designing, styling, and building all aspects of Salesforce Lightning.
+
+Qn-How to do parent to child communication vice versa?
+
+##Communication in LWC-----------------
+##Parent to Child
+Public Properties: In LWC, you can pass data from a parent component to a child component using public properties. 
+The child component exposes these properties using the @api decorator, and the parent component sets these properties 
+directly in its template.
+	   
+(childComponent.js)
+-----------------------------
+import { LightningElement, api } from 'lwc';
+
+export default class ChildComponent extends LightningElement {
+    @api message; 
+}
+-------------------------------
+(childComponent.html)
+--------------------------------
+<template>
+    <p>{message}</p>
+</template>
+--------------------------------
+(parentComponent.js)
+--------------------------------
+import { LightningElement } from 'lwc';
+
+export default class ParentComponent extends LightningElement {
+    parentMessage = 'Hello from Parent!';
+}
+----------------------------
+(parentComponent.html)
+---------------------------------
+<template>
+    <c-child-component message={parentMessage}></c-child-component> 
+</template>
+-----------------------------------
+
+#Child to Parent Communication---------------------------
+
+Custom Events: To send data from a child component to a parent component, you can use custom events. 
+The child component dispatches an event with the necessary data, and the parent component listens for this event 
+and handles it accordingly.
+
+(childComponent.js)
+----------------------------
+import { LightningElement } from 'lwc';
+
+export default class ChildComponent extends LightningElement {
+    handleClick() {
+        const event = new CustomEvent('message', {
+            detail: 'Hello from Child!'
+        });
+        this.dispatchEvent(event); 
+    }
+}
+---------------------------------------
+(childComponent.html)
+------------------------------------
+<template>
+    <button onclick={handleClick}>Send Message to Parent</button>
+</template>
+-----------------------
+(parentComponent.js)
+------------------------------
+import { LightningElement } from 'lwc';
+
+export default class ParentComponent extends LightningElement {
+    handleMessage(event) {
+        console.log(event.detail); 
+    }
+}
+------------------------------
+(parentComponent.html)
+-----------------------
+<template>
+    <c-child-component onmessage={handleMessage}></c-child-component> 
+</template>
+---------------------------------------------------------
+
+
+
+
+
+
+
+
+                                               ----------------------------------------------Aura--------------------------------
+##Communication in Aura--
+#Parent to Child--
+Attributes: In Aura, you can pass data from a parent component to a child component using attributes. 
+The child component defines these attributes, and the parent component sets them in its markup.
+
+##Child to Parent--
+Events: In Aura, communication from child to parent is typically done using events. The child component fires an event, which the parent component handles. 
+This allows the child to send data or trigger actions in the parent.
+											   
+Qn. Explain data binding in aura
+Data binding is two way in aura framework i.e. parent to child component and child to parent component.											   
+											   
+1. How can we extend any component in aura framework? 
+To make a component extendable we need to set value of ‘extensible’ attribute as ‘true’ of the parent aura component. 
+When a component extends another component it inherits all of the helper methods and attributes.
+
+------------------------------------------------------------------------parent-to-child and child-to-parent communication----------------------------------
+
+			 
+Qn.examples of parent-to-child and child-to-parent communication in Aura components:
+We can do parent to child comunication using attribute
+### Parent-to-Child Communication
+
+**Scenario:** A parent component passes a message to a child component.
+
+**Parent Component (ParentComponent.cmp):**
+
+<aura:component>
+    <c:ChildComponent message="Hello, Child!" />
+</aura:component>
+
+
+(ChildComponent.cmp):**
+
+<aura:component>
+    <aura:attribute name="message" type="String" />
+    <p>{!v.message}</p>
+</aura:component>
+
+
+### Child-to-Parent Communication
+
+**Scenario:** A child component notifies the parent component when a button is clicked.
+
+(ChildComponent.cmp):**
+
+<aura:component>
+    <aura:attribute name="onButtonClick" type="Aura.Action" />
+    <lightning:button label="Click Here" onclick="{!c.handleClick}" />
+</aura:component>
+
+
+(ChildComponentController.js):**
+
+({
+    handleClick: function(component, event, helper) {
+        var action = component.get("v.onButtonClick");
+        if (action) {
+            action();
+        }
+    }
+})
+
+
+(ParentComponent.cmp):**
+
+<aura:component>
+    <c:ChildComponent onButtonClick="{!c.handleChildClick}" />
+</aura:component>
+
+
+**Parent Component Controller (ParentComponentController.js):**
+
+({
+    handleChildClick: function(component, event, helper) {
+        alert("Button clicked in child component!");
+    }
+})
+
+----------------------------------------------------------------------------------------------
+Qn.2. How can you call one JS controller method from another JS controller method in aura?
+here is sample code to call another JS method.
+
+({
+    func1 : function(component, event, helper) {
+     
+        var func2 = component.get("c.func2");
+        
+        $A.enqueueAction(func2);
+        
+    },
+    
+    func2 : function(component, event, helper) {
+        
+        alert('inside func2');
+    }
+})
+-------------------------------------------------------------------------Appplication Events-----------------------------------
+
+Qn. What are Component Events and Application Events.
+Ans- Communication between two components is called Component Events. It is not necessary for the components to be 
+in a relationship.
+Application events follow a publish-subscribe pattern, where an event is fired and any component that is listening for that event can receive it.
+
+To create an application event, you need to define the event in a separate .evt file. Here’s an example:
+
+<!-- myEvent.evt -->
+<aura:event type="APPLICATION">
+    <aura:attribute name="message" type="String"/>
+</aura:event>
+
+To publish an application event, you use the $A.get()method to get a reference to the event and then call the fire()method to publish it. 
+Here’s an example:
+
+// Get a reference to the event
+var myEvent = $A.get("e.c:myEvent");
+
+// Set the attribute values
+myEvent.setParams({
+    "message": "Hello World!"
+});
+
+// Fire the event
+myEvent.fire();
+
+To subscribe to an application event, we use the <aura:handler>tag in our component markup. 
+Here’s an example:
+
+<!-- MyComponent.cmp -->
+<aura:component>
+    <aura:handler event="c:myEvent" action="{!c.handleEvent}"/>
+</aura:component>
+
+In this example, we define a component called **MyComponent**and use the <aura:handler> tag to subscribe to the **myEvent**event that we defined earlier. 
+We specify the **event**attribute as “c:myEvent” to indicate that we want to subscribe to the **myEvent**event in the “c” namespace. We also specify the **action**attribute to indicate the JavaScript function that should be called when the event is fired.
+
+Handling an Application Event:
+When an application event is fired, the JavaScript function specified in the **action**attribute of the **<aura:handler>**tag is called with an **event**parameter. 
+Here’s an example:
+// MyComponentController.js
+({
+    handleEvent: function(component, event, helper) {
+        var message = event.getParam("message");
+        console.log("Received event with message: " + message);
+    }
+})
+
+In this example, we define a JavaScript controller for **MyComponent**and create a function called **handleEvent**that takes the component, event, and helper parameters. 
+We use the **getParam()**method on the **event**parameter to retrieve the value of the “message” attribute that was set when the event was fired. We then log the message to the console.	
+
+
+
+
+
+
+
+
+-----------------------------------------------------Integration using REST and SOAP in APEX---------------------
+
+
+Qn. How can we integrate into external REST web services?
+For integrating with external REST web services, we would tend to use HTTP callouts to invoke the external API. 
+We can use the JSON and XMLStreamWriter classes to build payloads to match the specifics of the external API.
+
+
+Qn.Example of integrating Salesforce with external systems using both REST and SOAP in Apex:
+
+### REST Integration Example
+
+**Scenario:** Fetching data from an external REST API.
+
+**Apex Class:**
+
+public class RestIntegrationExample {
+    public static void fetchDataFromRestAPI() {
+        Http http = new Http();
+        HttpRequest request = new HttpRequest();
+        request.setEndpoint('https://api.example.com/data');
+        request.setMethod('GET');
+        
+        HttpResponse response = http.send(request);
+        if (response.getStatusCode() == 200) {
+            String responseBody = response.getBody();
+            // Process the response
+            System.debug('Response: ' + responseBody);
+        } else {
+            System.debug('Error: ' + response.getStatus());
+        }
+    }
+}
+```
+
+In this example, the `fetchDataFromRestAPI` method sends a GET request to an external REST API endpoint and processes the response.
+
+### SOAP Integration Example
+
+**Scenario:** Calling an external SOAP web service.
+
+**Apex Class:**
+```apex
+public class SoapIntegrationExample {
+    public void callSoapWebService() {
+        String endpoint = 'https://api.example.com/soap';
+        String soapMessage = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://example.com/webservice">' +
+                             '<soapenv:Header/>' +
+                             '<soapenv:Body>' +
+                             '<web:YourRequest>' +
+                             '<web:Parameter>Value</web:Parameter>' +
+                             '</web:YourRequest>' +
+                             '</soapenv:Body>' +
+                             '</soapenv:Envelope>';
+        
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint(endpoint);
+        req.setMethod('POST');
+        req.setHeader('Content-Type', 'text/xml');
+        req.setBody(soapMessage);
+        
+        Http http = new Http();
+        HttpResponse res = http.send(req);
+        
+        if (res.getStatusCode() == 200) {
+            String responseBody = res.getBody();
+            // Process the response
+            System.debug('Response: ' + responseBody);
+        } else {
+            System.debug('Error: ' + res.getStatus());
+        }
+    }
+}
+```
+
+In this example, the `callSoapWebService` method constructs a SOAP message and sends it to an external SOAP web service endpoint, then processes the response.
+
+Qn. What is SOAP Message?
+
+Ans.A SOAP message is an XML-based protocol used for exchanging information between computers. 
+It consists of the following key components:
+
+Envelope: The root element that defines the XML document as a SOAP message.
+Header: An optional element that contains application-specific information (like authentication, transaction details, etc.).
+Body: A mandatory element that contains the actual message or call and response information.
+Fault: An optional element that provides information about errors that occurred while processing the message.
+
+Qn.Diff between REST & SOAP
+Ans-REST (Representational State Transfer) and SOAP (Simple Object Access Protocol) are two different approaches for building web services. Here are the key differences between them:
+
+### 1. Protocol vs. Architectural Style
+- **SOAP**: SOAP is a protocol with strict standards and rules for message structure and processing.
+- **REST**: REST is an architectural style that uses standard HTTP methods and is more flexible and less rigid than SOAP.
+
+### 2. Data Format
+- **SOAP**: Only supports XML for message format.
+- **REST**: Supports multiple formats including XML, JSON, plain text, and HTML.
+
+### 3. Communication
+- **SOAP**: Uses service interfaces to expose the business logic. It relies on WSDL (Web Services Description Language) for describing the services.
+- **REST**: Uses URIs (Uniform Resource Identifiers) to access resources and standard HTTP methods (GET, POST, PUT, DELETE) for operations.
+
+### 4. Bandwidth and Resource Consumption
+- **SOAP**: Requires more bandwidth and resources due to its complex XML messaging.
+- **REST**: Generally requires less bandwidth and resources, making it faster and more efficient.
+
+### 5. Security
+- **SOAP**: Has built-in security features like WS-Security, which provides end-to-end security.
+- **REST**: Inherits security measures from the underlying transport protocol (usually HTTPS).
+
+### 6. Statefulness
+- **SOAP**: Can be stateful or stateless. It maintains the state of the conversation.
+- **REST**: Is stateless. Each request from a client to server must contain all the information needed to understand and process the request.
+
+### 7. Error Handling
+- **SOAP**: Has built-in error handling through the `<Fault>` element in the SOAP message.
+- **REST**: Uses standard HTTP status codes for error handling (e.g., 404 for Not Found, 500 for Internal Server Error).
+
+### 8. Use Cases
+- **SOAP**: Preferred for enterprise-level applications requiring high security and complex transactions (e.g., banking services).
+- **REST**: Preferred for web and mobile applications due to its simplicity, performance, and scalability.
+
+### Example Scenarios
+- **SOAP**: Suitable for scenarios where a formal contract between client and server is required, such as financial services.
+- **REST**: Suitable for scenarios where quick, lightweight communication is needed, such as social media integrations.
+
+
+
+---------------------------------------------
+
+                                                      ------------------APEX-----------------------------
+Qn. write parent to child query?
+List<Account> accountList=[SELECT Id,Name(SELECT Id,LastName FROM Contacts) FROM Account];
+WHERE Name LIKE 'Acme'];													  
+
+Qn. Write Child to parent query?
+List<Contact> contactList= [SELECT Id, LastName ,Account.Id, Account.Name FROM Contact;
+WHERE Name Like'abc'];
+													  
+Q. write syntax for Batch Apex?
+Ans- global class MyBatchClass implements Database.Batchable<sObject> {
+    
+    // Start method
+    global Database.QueryLocator start(Database.BatchableContext BC) {
+        // Query to fetch records
+        return Database.getQueryLocator('SELECT Id, Name FROM Account');
+    }
+
+    // Execute method
+    global void execute(Database.BatchableContext BC, List<sObject> scope) {
+        // Process each batch of records
+        for (sObject s : scope) {
+            Account acc = (Account)s;
+            acc.Name = acc.Name + ' - Updated';
+        }
+        update scope;
+    }
+
+    // Finish method
+    global void finish(Database.BatchableContext BC) {
+        // Post-processing after all batches are processed
+        System.debug('Batch Apex job completed.');
+    }
+}
+
+start: This method is called at the beginning of the batch job. It returns a Database.QueryLocator or an Iterable that contains the records to be processed.
+execute: This method is called for each batch of records. It processes the records in the scope parameter.
+finish: This method is called after all batches are processed. It can be used for post-processing tasks.
+You can invoke this batch class using the following code:
+
+MyBatchClass batch = new MyBatchClass();
+Database.executeBatch(batch, 200); // 200 is the batch size        
+
+
+
+Qn.  How can we enforce Field Level Security (FLS) within our Apex code?
+
+If we are performing a query, and do not require graceful handling of missing permissions,
+ we can add the WITH SECURITY_ENFORCED clause to the query. 
+ This will cause an insufficient permissions exception to be thrown if any permissions to the requested fields are missing.
+ 
+Qn.How can we enforce Sharing Rules within our Apex code?
+We can define our class to use the with sharing keywords in its definition.
+
+Qn. what is Mixed DML error, what are Setup and Non Setup Objects?
+A **Mixed DML (Data Manipulation Language) error** in Salesforce occurs when you try to perform DML operations on 
+setup and non-setup objects in the same transaction. 
+Setup objects are those that affect the user's access to records in the organization, 
+such as `User`, `UserRole`, `Profile`, etc. Non-setup objects are standard or custom objects like `Account`, 
+`Contact`, etc.
+
+### Example of a Mixed DML Error
+
+Imagine you have a scenario where you need to create a new `Account` and assign a `User` to a specific `UserRole` 
+in the same transaction. Here's a simplified example in Apex code:
+
+```apex
+public class MixedDMLErrorExample {
+    public static void createAccountAndUser() {
+        // Create a new Account
+        Account newAccount = new Account(Name = 'Example Account');
+        insert newAccount;
+
+        // Create a new User and assign a UserRole
+        Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
+        UserRole r = [SELECT Id FROM UserRole WHERE Name = 'CEO'];
+        User newUser = new User(
+            alias = 'example',
+            email = 'example@example.com',
+            emailencodingkey = 'UTF-8',
+            lastname = 'User',
+            languagelocalekey = 'en_US',
+            localesidkey = 'en_US',
+            profileid = p.Id,
+            userroleid = r.Id,
+            timezonesidkey = 'America/Los_Angeles',
+            username = 'example@example.com'
+        );
+        insert newUser; // This will cause a Mixed DML error
+    }
+}
+```
+
+In this example, the `insert newUser` operation will fail with a Mixed DML error because it tries to insert a `User` (a setup object) after inserting an `Account` (a non-setup object) in the same transaction¹(https://www.apexhours.com/mixed-dml-operation-error-in-salesforce/)²(https://help.salesforce.com/s/articleView?id=000382600&language=en_US&type=1).
+
+### How to Avoid Mixed DML Errors
+
+To avoid this error, you can separate the operations into different transactions. One common approach is to use a `@future` method for the setup object operations:
+
+```apex
+public class MixedDMLErrorExample {
+    public static void createAccountAndUser() {
+        // Create a new Account
+        Account newAccount = new Account(Name = 'Example Account');
+        insert newAccount;
+
+        // Call a future method to create the User
+        createUserInFuture();
+    }
+
+    @future
+    public static void createUserInFuture() {
+        Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User'];
+        UserRole r = [SELECT Id FROM UserRole WHERE Name = 'CEO'];
+        User newUser = new User(
+            alias = 'example',
+            email = 'example@example.com',
+            emailencodingkey = 'UTF-8',
+            lastname = 'User',
+            languagelocalekey = 'en_US',
+            localesidkey = 'en_US',
+            profileid = p.Id,
+            userroleid = r.Id,
+            timezonesidkey = 'America/Los_Angeles',
+            username = 'example@example.com'
+        );
+        insert newUser; // This will now succeed
+    }
+}
+```
+
+By using the `@future` annotation, the `createUserInFuture` method runs in a separate transaction, thus avoiding the Mixed DML error¹(https://www.apexhours.com/mixed-dml-operation-error-in-salesforce/)²(https://help.salesforce.com/s/articleView?id=000382600&language=en_US&type=1).
+
+If you have any more questions or need further clarification, feel free to ask!
+
+Source: Conversation with Copilot, 12/12/2024
+(1) Mixed DML Operation Error in Salesforce - Apex Hours. https://www.apexhours.com/mixed-dml-operation-error-in-salesforce/.
+(2) Error 'Mixed DML Operation' when you create or update records through .... https://help.salesforce.com/s/articleView?id=000382600&language=en_US&type=1.
+ 
+                                                           ------------------VF Page--------------
+
+1. What are Standard Controllers in VF?
+  Standard controllers simply provide standard functionality to visualforce pages, such as Save, Edit, Cancel, and Delete, among other things.
+
+2. What are custom Controllers in VF?
+  We can develop our code or alter current functionality by using Custom controllers.  
+  Using standard controllers, we are unable to customize/develop our functionality.
+  
+3. What is meant by StandardList Controllers in VisualForce?  
+An extra four navigation actions are included in the standard list controller. First, last, next, and prior are the four options. 
+With the following objects, we can use normal list controllers.
+Users, Assets, Campaigns, Ideas, Contracts, Leads, Product2, Opportunities, Solutions, and Custom Objects are just a few of the terms you'll come across.
+
+4. What is the Difference Between Controllers and Extensions?
+https://salesforce.stackexchange.com/questions/4041/what-is-the-difference-between-controllers-and-extensions  
+
+5. When Should I Use Lightning Web Components Instead of Visualforce?
+You must determine when to reuse a Visualforce page within Lightning Experience and when to rebuild it as a Lightning web component 
+as you start constructing Lightning web components. If you wish to rebuild, seriously consider:
+
+The user experience is more engaging and responsive.
+an easy-to-optimize experience for a variety of device types.
+Your app will run more smoothly.
+The Lightning Experience low-code tools and Lightning web components are always recommended for new development. 
+They provide numerous advantages and make the development process simpler.
+
+6. Explain about Button Overriding in VisualForce?
+Ans: Standard buttons, such as New, View, and Edit, can be overridden independently in Lightning Experience, mobile, and Salesforce Classic. When a user hits a regular, personalised, or external object tab, you can also change the tab home page.
+
+To override the home page of a normal button or tab:
+To override a button or tab's home page, click Edit next to it.
+As an override type, select the Visualforce page.
+When users click the button or tab, select the Visualforce page you want to execute.
