@@ -128,10 +128,11 @@ export default class AccountList extends LightningElement {
 -------------------------------------------
 
 Qn.What happen if I use cacheable=false ?
-Ans-If you use the @wire method with an Apex method that has cacheable=false, the data fetched will not be cached on the client side. This means:
-
-No Caching: Every time the wire service is triggered, it will make a fresh call to the server to fetch the data, which can lead to increased server load and 
-slower performance.
+Ans-If you use the @wire method with an Apex method that has cacheable=false, 
+the data fetched will not be cached on the client side. 
+This means:
+No Caching: Every time the wire service is triggered, it will make a fresh call to the server to fetch the data, 
+which can lead to increased server load and slower performance.
 No Reactive Updates: The wire service won’t benefit from the Lightning Data Service (LDS) cache, so it won’t 
 automatically update the UI with cached data when the data changes.
 Use Cases: This setup is generally used when you need the most up-to-date data and caching is not suitable, 
@@ -144,16 +145,20 @@ Below are the methods and the sequence in which they get invoked:
 
 1.constructor():
  When it’s called: When the component instance is created.
- Purpose: Initialize the component. You can set up initial state and bind event handlers here. However, avoid accessing child elements as they are not yet available1.
+ Purpose: Initialize the component. You can set up initial state and bind event handlers here. 
+ However, avoid accessing child elements as they are not yet available.
 2.connectedCallback():
  When it’s called: When the component is inserted into the DOM.
- Purpose: Perform tasks related to the component being added to the DOM, such as fetching data or setting up event listeners. Child elements are still not accessible at this point2.
+ Purpose: Perform tasks related to the component being added to the DOM, such as fetching data or setting up event listeners. 
+ Child elements are still not accessible at this point.
 3.render():
  When it’s called: Before the component’s template is rendered.
- Purpose: Customize the rendering process. This method is rarely overridden, but it can be used to conditionally render parts of the template2.
+ Purpose: Customize the rendering process. This method is rarely overridden, but it can be used to 
+ conditionally render parts of the template2.
 4.renderedCallback():
  When it’s called: After the component’s template has been rendered.
- Purpose: Perform post-rendering tasks, such as interacting with the DOM or initializing third-party libraries. Child elements are now accessible2.
+ Purpose: Perform post-rendering tasks, such as interacting with the DOM or initializing third-party libraries. 
+ Child elements are now accessible2.
 5.disconnectedCallback():
  When it’s called: When the component is removed from the DOM.
  Purpose: Clean up tasks, such as removing event listeners or cancelling network requests2.
@@ -270,7 +275,7 @@ Data binding is two way in aura framework i.e. parent to child component and chi
 To make a component extendable we need to set value of ‘extensible’ attribute as ‘true’ of the parent aura component. 
 When a component extends another component it inherits all of the helper methods and attributes.
 
-------------------------------------------------------------------------parent-to-child and child-to-parent communication----------------------------------
+--------------------------------------------------parent-to-child and child-to-parent communication----------------------------------
 
 			 
 Qn.examples of parent-to-child and child-to-parent communication in Aura components:
@@ -351,15 +356,15 @@ here is sample code to call another JS method.
         alert('inside func2');
     }
 })
--------------------------------------------------------------------------Appplication Events-----------------------------------
+-----------------------------------------------------Appplication Events-----------------------------------
 
 Qn. What are Component Events and Application Events.
 Ans- Communication between two components is called Component Events. It is not necessary for the components to be 
 in a relationship.
-Application events follow a publish-subscribe pattern, where an event is fired and any component that is listening for that event can receive it.
-
+Application events follow a publish-subscribe pattern, where an event is fired and any component 
+that is listening for that event can receive it.
 To create an application event, you need to define the event in a separate .evt file. Here’s an example:
-
+*******************************************************
 <!-- myEvent.evt -->
 <aura:event type="APPLICATION">
     <aura:attribute name="message" type="String"/>
@@ -387,12 +392,16 @@ Here’s an example:
     <aura:handler event="c:myEvent" action="{!c.handleEvent}"/>
 </aura:component>
 
-In this example, we define a component called **MyComponent**and use the <aura:handler> tag to subscribe to the **myEvent**event that we defined earlier. 
-We specify the **event**attribute as “c:myEvent” to indicate that we want to subscribe to the **myEvent**event in the “c” namespace. We also specify the **action**attribute to indicate the JavaScript function that should be called when the event is fired.
+In this example, we define a component called **MyComponent**and use the <aura:handler> tag to subscribe to the 
+**myEvent**event that we defined earlier. We specify the **event**attribute as “c:myEvent” to indicate that we want to
+subscribe to the **myEvent**event in the “c” namespace. We also specify the
+**action**attribute to indicate the JavaScript function that should be called when the event is fired.
 
 Handling an Application Event:
-When an application event is fired, the JavaScript function specified in the **action**attribute of the **<aura:handler>**tag is called with an **event**parameter. 
+When an application event is fired, the JavaScript function specified in the **action**attribute of the
+**<aura:handler>**tag is called with an **event**parameter. 
 Here’s an example:
+************************************************
 // MyComponentController.js
 ({
     handleEvent: function(component, event, helper) {
@@ -401,8 +410,10 @@ Here’s an example:
     }
 })
 
-In this example, we define a JavaScript controller for **MyComponent**and create a function called **handleEvent**that takes the component, event, and helper parameters. 
-We use the **getParam()**method on the **event**parameter to retrieve the value of the “message” attribute that was set when the event was fired. We then log the message to the console.	
+In this example, we define a JavaScript controller for **MyComponent**and create a function 
+called **handleEvent**that takes the component, event, and helper parameters. 
+We use the **getParam()**method on the **event**parameter to retrieve the value of 
+the “message” attribute that was set when the event was fired. We then log the message to the console.	
 
 
 
@@ -446,12 +457,12 @@ public class RestIntegrationExample {
 }
 ```
 
-In this example, the `fetchDataFromRestAPI` method sends a GET request to an external REST API endpoint and processes the response.
+In this example, the `fetchDataFromRestAPI` method sends a GET request to an external
+REST API endpoint and processes the response.
 
 ### SOAP Integration Example
-
 **Scenario:** Calling an external SOAP web service.
-
+**************************************************
 **Apex Class:**
 ```apex
 public class SoapIntegrationExample {
@@ -486,10 +497,10 @@ public class SoapIntegrationExample {
 }
 ```
 
-In this example, the `callSoapWebService` method constructs a SOAP message and sends it to an external SOAP web service endpoint, then processes the response.
-
+In this example, the `callSoapWebService` method constructs a SOAP message and sends it 
+to an external SOAP web service endpoint, then processes the response.
+-----------------------------------------------------------------
 Qn. What is SOAP Message?
-
 Ans.A SOAP message is an XML-based protocol used for exchanging information between computers. 
 It consists of the following key components:
 
@@ -497,9 +508,10 @@ Envelope: The root element that defines the XML document as a SOAP message.
 Header: An optional element that contains application-specific information (like authentication, transaction details, etc.).
 Body: A mandatory element that contains the actual message or call and response information.
 Fault: An optional element that provides information about errors that occurred while processing the message.
-
+-----------------------------------------------------------------------
 Qn.Diff between REST & SOAP
-Ans-REST (Representational State Transfer) and SOAP (Simple Object Access Protocol) are two different approaches for building web services. Here are the key differences between them:
+Ans-REST (Representational State Transfer) and SOAP (Simple Object Access Protocol) 
+are two different approaches for building web services. Here are the key differences between them:
 
 ### 1. Protocol vs. Architectural Style
 - **SOAP**: SOAP is a protocol with strict standards and rules for message structure and processing.
@@ -510,8 +522,10 @@ Ans-REST (Representational State Transfer) and SOAP (Simple Object Access Protoc
 - **REST**: Supports multiple formats including XML, JSON, plain text, and HTML.
 
 ### 3. Communication
-- **SOAP**: Uses service interfaces to expose the business logic. It relies on WSDL (Web Services Description Language) for describing the services.
-- **REST**: Uses URIs (Uniform Resource Identifiers) to access resources and standard HTTP methods (GET, POST, PUT, DELETE) for operations.
+- **SOAP**: Uses service interfaces to expose the business logic. It relies on 
+WSDL (Web Services Description Language) for describing the services.
+- **REST**: Uses URIs (Uniform Resource Identifiers) to access resources and
+standard HTTP methods (GET, POST, PUT, DELETE) for operations.
 
 ### 4. Bandwidth and Resource Consumption
 - **SOAP**: Requires more bandwidth and resources due to its complex XML messaging.
@@ -523,7 +537,8 @@ Ans-REST (Representational State Transfer) and SOAP (Simple Object Access Protoc
 
 ### 6. Statefulness
 - **SOAP**: Can be stateful or stateless. It maintains the state of the conversation.
-- **REST**: Is stateless. Each request from a client to server must contain all the information needed to understand and process the request.
+- **REST**: Is stateless. Each request from a client to server must contain all the information needed
+to understand and process the request.
 
 ### 7. Error Handling
 - **SOAP**: Has built-in error handling through the `<Fault>` element in the SOAP message.
@@ -537,9 +552,7 @@ Ans-REST (Representational State Transfer) and SOAP (Simple Object Access Protoc
 - **SOAP**: Suitable for scenarios where a formal contract between client and server is required, such as financial services.
 - **REST**: Suitable for scenarios where quick, lightweight communication is needed, such as social media integrations.
 
-
-
----------------------------------------------
+-----------------------------------------------------------------------
 
                                                       ------------------APEX-----------------------------
 Qn. write parent to child query?
@@ -576,7 +589,8 @@ Ans- public class MyBatchClass implements Database.Batchable<sObject> {
     }
 }
 
-start: This method is called at the beginning of the batch job. It returns a Database.QueryLocator or an Iterable that contains the records to be processed.
+start: This method is called at the beginning of the batch job. It returns a Database.QueryLocator or an 
+Iterable that contains the records to be processed.
 execute: This method is called for each batch of records. It processes the records in the scope parameter.
 finish: This method is called after all batches are processed. It can be used for post-processing tasks.
 You can invoke this batch class using the following code:
@@ -634,13 +648,15 @@ public class MixedDMLErrorExample {
 }
 ```
 
-In this example, the `insert newUser` operation will fail with a Mixed DML error because it tries to insert a `User` (a setup object) after inserting an `Account` (a non-setup object) in the same transaction¹(https://www.apexhours.com/mixed-dml-operation-error-in-salesforce/)²(https://help.salesforce.com/s/articleView?id=000382600&language=en_US&type=1).
+In this example, the `insert newUser` operation will fail with a Mixed DML error because it tries to insert a `User` (a setup object) after 
+inserting an `Account` (a non-setup object) in the same transaction¹
 
 ### How to Avoid Mixed DML Errors
 
-To avoid this error, you can separate the operations into different transactions. One common approach is to use a `@future` method for the setup object operations:
+To avoid this error, you can separate the operations into different transactions. One common approach is to use 
+a `@future` method for the setup object operations:
 
-```apex
+*********************************************************
 public class MixedDMLErrorExample {
     public static void createAccountAndUser() {
         // Create a new Account
@@ -672,7 +688,7 @@ public class MixedDMLErrorExample {
 }
 ```
 
-By using the `@future` annotation, the `createUserInFuture` method runs in a separate transaction, thus avoiding the Mixed DML error¹(https://www.apexhours.com/mixed-dml-operation-error-in-salesforce/)²(https://help.salesforce.com/s/articleView?id=000382600&language=en_US&type=1).
+By using the `@future` annotation, the `createUserInFuture` method runs in a separate transaction, thus avoiding the Mixed DML error
 
 
 
