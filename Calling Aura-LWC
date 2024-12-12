@@ -3,10 +3,8 @@
 **LWC Component (`lwcComponent.js`):
 
 import { LightningElement, api } from 'lwc';
-
 export default class LwcComponent extends LightningElement {
     @api message = 'Hello from LWC!';
-
     @api
     showMessage() {
         alert(this.message);
@@ -60,7 +58,6 @@ export default class LwcComponent extends LightningElement {
 **LWC Component (`lwcComponent.js`):**
 *****************************************
 import { LightningElement, api } from 'lwc';
-
 export default class lwcComponent extends LightningElement {
     @api
     callAuraMethod() {
@@ -68,7 +65,7 @@ export default class lwcComponent extends LightningElement {
         auraComponent.showMessage();
     }
 }
-```
+*************************************
 
 **LWC Template (`lwcComponent.html`):
 ******************************************
