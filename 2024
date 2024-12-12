@@ -92,39 +92,39 @@ public with sharing class AccountController {
 **LWC JavaScript (`accountList.js`):
 
 import { LightningElement, track } from 'lwc';
-import getAccounts from '@salesforce/apex/AccountController.getAccounts';
+import getAccounts from '@salesforce/apex/ContactController.getContacts';
 
-export default class AccountList extends LightningElement {
-    @track accounts;
+export default class ContactList extends LightningElement {
+    @track contacts;
     @track error;
 
     handleLoadAccounts() {
-        getAccounts()
+        getContacts()
             .then(result => {
-                this.accounts = result;
+                this.contacts = result;
                 this.error = undefined;
             })
             .catch(error => {
                 this.error = error;
-                this.accounts = undefined;
+                this.contacts = undefined;
             });
     }
 }
 ****************************************
 
-**LWC HTML (`accountList.html`):
+**LWC HTML (`contactList.html`):
 
 <template>
     <button onclick={handleLoadAccounts}>Load Accounts</button>
-    <template if:true={accounts}>
+    <template if:true={contacts}>
         <ul>
-            <template for:each={accounts} for:item="account">
-                <li key={account.Id}>{account.Name}</li>
+            <template for:each={contacts} for:item="contact">
+                <li key={contact.Id}>{contacts.Name}</li>
             </template>
         </ul>
     </template>
     <template if:true={error}>
-        <p>Error loading accounts</p>
+        <p>Error loading contact</p>
     </template>
 </template>
 
