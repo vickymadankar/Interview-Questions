@@ -1,0 +1,79 @@
+### Calling an LWC from an Aura Component
+***************************************************
+**LWC Component (`lwcComponent.js`):
+
+import { LightningElement, api } from 'lwc';
+
+export default class LwcComponent extends LightningElement {
+    @api message = 'Hello from LWC!';
+
+    @api
+    showMessage() {
+        alert(this.message);
+    }
+}
+*********************************************
+**LWC Template (`lwcComponent.html`):**
+
+<template>
+    <div>{message}</div>
+</template>
+************************************************
+
+**Aura Component (`MyAura.cmp`):**
+
+<aura:component>
+    <c:lwcComponent aura:id="lwcComponent"></c:lwcComponent>
+    <lightning:button label="Call LWC Method" onclick="{! c.handleClick }"/>
+</aura:component>
+*************************************************
+
+**Aura Controller (`auraController.js`):**
+***********************************************
+({
+    handleClick: function(component, event, helper) {
+        var lwcVar = component.find('lwcComponent');
+        lwcVar.showMessage();
+    }
+})
+-------------------------------------------------------
+
+### Calling an Aura Component from an LWC---$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+**Aura Component (`myAura.cmp`):
+*************************************************
+<aura:component>
+    <aura:attribute name="message" type="String" default="Hello from Aura!"/>
+    <lightning:button label="Call Aura Method" onclick="{! c.showMessage }"/>
+</aura:component>
+*****************************************************
+
+**Aura Controller (`auraController.js`):**
+***********************************************
+({
+    showMessage: function(component, event, helper) {
+        alert(component.get("v.message"));
+    }
+})
+******************************************
+
+**LWC Component (`lwcComponent.js`):**
+*****************************************
+import { LightningElement, api } from 'lwc';
+
+export default class lwcComponent extends LightningElement {
+    @api
+    callAuraMethod() {
+        const auraComponent = this.template.querySelector('c-my-aura');
+        auraComponent.showMessage();
+    }
+}
+```
+
+**LWC Template (`lwcComponent.html`):
+******************************************
+<template>
+    <c-my-aura></c-my-aura>
+    <lightning-button label="Call Aura Method from LWC" onclick={callAuraMethod}></lightning-button>
+</template>
+---------------------------------------------------
