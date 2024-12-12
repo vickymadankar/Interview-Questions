@@ -7,37 +7,126 @@ by implementing Lightning web components, Lightning Flows and other development 
 
 ----------------------------------
 Good Morning Everyone. Thank you very much for giving me this opportunity. My name is Vicky Madankar, and I have been working as a Salesforce Developer 
-for over five years. For the past two years, I have been with Perficient.Throughout my career, I have taken on various roles that required extensive 
+for over five years. For the past two years, I have been with Perficient.Throughout my career, I have worked on various roles that required extensive 
 collaboration with different teams and stakeholders. Recently I was working on a project for Phillips 66.
 In this role, I focused on enhancing the user experience by implementing Lightning Web Components, Lightning Flows, and other development procedures.
 Before that I was working on CAT Non Finance Project. 
 
 
---------------------LWC-----------------------------
+                                        --------------------LWC-----------------------------
+										
 Qn. Use case scenarion in Project about LWC.
-Ans. Phillips 66 User has a component on a Quote Record Page where Under a particular Quote user was adding a ship to record
+Ans. Phillips 66 User has a component on a Quote Record Page where Under a particular Quote user ship to records
 are displayed.Pagination was there to navigate user to the records.User was doing manual search using ctrl+f and was
 searching for records which he wants to add under the quote record. 
 
 For better user Experience I added Search functionality in the LWC Component. I modified the component so that 
-the selection persists even after he resets the search or he NAvigates to next.
+the selection persists even after he resets the search or he Navigates to next.
 I created a new Set to store the selected rows and pass those selected rows to the furher functions.
 
+----------------------------------------------------
 Qn.1.What is wire adapter? how it is used?
 .when should i use Imperative call, when should i use wire adapter call? give use case for both.
 Ans-Wire Service:
+
 Declarative Approach: Use the @wire decorator to automatically fetch and bind data to your component.
 Reactive Updates: Ideal for scenarios where you need the UI to automatically update when the data changes.
 Caching: Efficient for read-only data as it supports caching, reducing server calls.
 Example Use Case: Displaying a list of records that updates in real-time as data changes.
+-------------------------------------------------------------
+**Apex Controller (`ContactController.cls`):
 
+public with sharing class ContactController {
+    @AuraEnabled(cacheable=true)
+    public static List<Contact> getContacts() {
+        return [SELECT Id, Name, Email FROM Contact LIMIT 10];
+    }
+}
+**********************************************
+**LWC JavaScript (`contactList.js`):
+
+import { LightningElement, wire } from 'lwc';
+import getContacts from '@salesforce/apex/ContactController.getContacts';
+
+export default class ContactList extends LightningElement {
+    @wire(getContacts) contacts;
+}
+***********************************************
+**LWC HTML (`contactList.html`):**
+
+<template>
+    <template if:true={contacts.data}>
+        <ul>
+            <template for:each={contacts.data} for:item="contact">
+                <li key={contact.Id}>{contact.Name} - {contact.Email}</li>
+            </template>
+        </ul>
+    </template>
+    <template if:true={contacts.error}>
+        <p>Error loading contacts</p>
+    </template>
+</template>
+********************************************
 Imperative Calls:
 
 Imperative Approach: Use JavaScript to call Apex methods directly, giving you more control over when and how data is fetched.
 Single Response: Suitable for operations that require user interaction, like form submissions or button clicks.
 Flexibility: Allows handling of complex logic and error handling within the component.
 Example Use Case: Submitting a form where you need to handle the response and show a success or error message.
+---------------------------------------------------------------------------------------
+### Imperative Call Example
+
+**Apex Controller (`AccountController.cls`):
+***********************************************
+public with sharing class AccountController {
+    @AuraEnabled
+    public static List<Account> getAccounts() {
+        return [SELECT Id, Name FROM Account LIMIT 10];
+    }
+}
+**********************************************
+
+**LWC JavaScript (`accountList.js`):
+
+import { LightningElement, track } from 'lwc';
+import getAccounts from '@salesforce/apex/AccountController.getAccounts';
+
+export default class AccountList extends LightningElement {
+    @track accounts;
+    @track error;
+
+    handleLoadAccounts() {
+        getAccounts()
+            .then(result => {
+                this.accounts = result;
+                this.error = undefined;
+            })
+            .catch(error => {
+                this.error = error;
+                this.accounts = undefined;
+            });
+    }
+}
+****************************************
+
+**LWC HTML (`accountList.html`):
+
+<template>
+    <button onclick={handleLoadAccounts}>Load Accounts</button>
+    <template if:true={accounts}>
+        <ul>
+            <template for:each={accounts} for:item="account">
+                <li key={account.Id}>{account.Name}</li>
+            </template>
+        </ul>
+    </template>
+    <template if:true={error}>
+        <p>Error loading accounts</p>
+    </template>
+</template>
+
 -------------------------------------------
+
 Qn.What happen if I use cacheable=false ?
 Ans-If you use the @wire method with an Apex method that has cacheable=false, the data fetched will not be cached on the client side. This means:
 
@@ -49,9 +138,34 @@ Use Cases: This setup is generally used when you need the most up-to-date data a
 such as for real-time data that changes frequently.
 For better performance and reactive updates, it’s recommended to use cacheable=true whenever possible.
 -------------------------------------------
+
+Qn. What are LWC lifecycle hook methods? What is the order in which they are called?
+Below are the methods and the sequence in which they get invoked:
+
+1.constructor():
+ When it’s called: When the component instance is created.
+ Purpose: Initialize the component. You can set up initial state and bind event handlers here. However, avoid accessing child elements as they are not yet available1.
+2.connectedCallback():
+ When it’s called: When the component is inserted into the DOM.
+ Purpose: Perform tasks related to the component being added to the DOM, such as fetching data or setting up event listeners. Child elements are still not accessible at this point2.
+3.render():
+ When it’s called: Before the component’s template is rendered.
+ Purpose: Customize the rendering process. This method is rarely overridden, but it can be used to conditionally render parts of the template2.
+4.renderedCallback():
+ When it’s called: After the component’s template has been rendered.
+ Purpose: Perform post-rendering tasks, such as interacting with the DOM or initializing third-party libraries. Child elements are now accessible2.
+5.disconnectedCallback():
+ When it’s called: When the component is removed from the DOM.
+ Purpose: Clean up tasks, such as removing event listeners or cancelling network requests2.
+6.errorCallback(error, stack):
+ When it’s called: When an error occurs during any lifecycle hook or rendering process.
+ Purpose: Handle errors gracefully. You can log errors or display user-friendly messages2.
+-----------------------------------------------
+
 Qn. What is SLDS?
-The Salesforce Lightning Design System (SLDS) is the user interface design framework 
+The Salesforce Lightning Design System (SLDS) is the user interface design framework. 
 used by Salesforce for designing, styling, and building all aspects of Salesforce Lightning.
+--------------------------------------------------------------------------------------------
 
 Qn-How to do parent to child communication vice versa?
 
@@ -146,10 +260,10 @@ Attributes: In Aura, you can pass data from a parent component to a child compon
 The child component defines these attributes, and the parent component sets them in its markup.
 
 ##Child to Parent--
-Events: In Aura, communication from child to parent is typically done using events. The child component fires an event, which the parent component handles. 
-This allows the child to send data or trigger actions in the parent.
+Events: In Aura, communication from child to parent is typically done using events. The child component fires an event, 
+which the parent component handles. This allows the child to send data or trigger actions in the parent.
 											   
-Qn. Explain data binding in aura
+Qn. Explain data binding in aura.
 Data binding is two way in aura framework i.e. parent to child component and child to parent component.											   
 											   
 1. How can we extend any component in aura framework? 
@@ -437,16 +551,16 @@ List<Contact> contactList= [SELECT Id, LastName ,Account.Id, Account.Name FROM C
 WHERE Name Like'abc'];
 													  
 Q. write syntax for Batch Apex?
-Ans- global class MyBatchClass implements Database.Batchable<sObject> {
+Ans- public class MyBatchClass implements Database.Batchable<sObject> {
     
     // Start method
-    global Database.QueryLocator start(Database.BatchableContext BC) {
+    public Database.QueryLocator start(Database.BatchableContext BC) {
         // Query to fetch records
         return Database.getQueryLocator('SELECT Id, Name FROM Account');
     }
 
     // Execute method
-    global void execute(Database.BatchableContext BC, List<sObject> scope) {
+    public void execute(Database.BatchableContext BC, List<sObject> scope) {
         // Process each batch of records
         for (sObject s : scope) {
             Account acc = (Account)s;
@@ -560,12 +674,8 @@ public class MixedDMLErrorExample {
 
 By using the `@future` annotation, the `createUserInFuture` method runs in a separate transaction, thus avoiding the Mixed DML error¹(https://www.apexhours.com/mixed-dml-operation-error-in-salesforce/)²(https://help.salesforce.com/s/articleView?id=000382600&language=en_US&type=1).
 
-If you have any more questions or need further clarification, feel free to ask!
 
-Source: Conversation with Copilot, 12/12/2024
-(1) Mixed DML Operation Error in Salesforce - Apex Hours. https://www.apexhours.com/mixed-dml-operation-error-in-salesforce/.
-(2) Error 'Mixed DML Operation' when you create or update records through .... https://help.salesforce.com/s/articleView?id=000382600&language=en_US&type=1.
- 
+
                                                            ------------------VF Page--------------
 
 1. What are Standard Controllers in VF?
@@ -578,7 +688,7 @@ Source: Conversation with Copilot, 12/12/2024
 3. What is meant by StandardList Controllers in VisualForce?  
 An extra four navigation actions are included in the standard list controller. First, last, next, and prior are the four options. 
 With the following objects, we can use normal list controllers.
-Users, Assets, Campaigns, Ideas, Contracts, Leads, Product2, Opportunities, Solutions, and Custom Objects are just a few of the terms you'll come across.
+Users, Assets, Campaigns, Ideas, Contracts, Leads, Product2, Opportunities, Solutions, and Custom Objects.
 
 4. What is the Difference Between Controllers and Extensions?
 https://salesforce.stackexchange.com/questions/4041/what-is-the-difference-between-controllers-and-extensions  
@@ -592,11 +702,9 @@ an easy-to-optimize experience for a variety of device types.
 Your app will run more smoothly.
 The Lightning Experience low-code tools and Lightning web components are always recommended for new development. 
 They provide numerous advantages and make the development process simpler.
+------------------------------------------------------------------------
 
-6. Explain about Button Overriding in VisualForce?
-Ans: Standard buttons, such as New, View, and Edit, can be overridden independently in Lightning Experience, mobile, and Salesforce Classic. When a user hits a regular, personalised, or external object tab, you can also change the tab home page.
-
-To override the home page of a normal button or tab:
+Qn.How To override the home page of a normal button or tab?
 To override a button or tab's home page, click Edit next to it.
 As an override type, select the Visualforce page.
 When users click the button or tab, select the Visualforce page you want to execute.
